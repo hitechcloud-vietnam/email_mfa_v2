@@ -1,0 +1,24 @@
+{
+    "_comment": "Default seed data and configuration defaults for Email MFA V2. HostBill modules in the Other/ directory ship a default.json next to the main class so admins can drop in a different file to override defaults at install time. Email MFA V2 has no lookup-table data to seed (codes are transient and stored in hb_email_mfa_codes at runtime), so this file only carries the configuration-defaults map used by the install/upgrade flow.",
+    "config_defaults": {
+        "Code Length": "6",
+        "Code TTL (seconds)": "1200",
+        "Max Active Codes per User": "5",
+        "Auto-send code after login": "1",
+        "Cache Backend": "auto"
+    },
+    "purposes": [
+        "login",
+        "setup",
+        "action"
+    ],
+    "email_templates": [
+        "MFA:Email V2:Verify Login",
+        "MFA:Email V2:Verify Setup",
+        "MFA:Email V2:Verify Action"
+    ],
+    "rate_limits": {
+        "verify_attempts_per_5min": 8,
+        "resend_attempts_per_5min": 8
+    }
+}
