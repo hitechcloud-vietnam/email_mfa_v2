@@ -1,0 +1,203 @@
+{
+    "file": "includes\/modules\/Other\/email_mfa_v2\/api\/class.email_mfa_v2_apiroutes.php",
+    "class": "email_mfa_v2",
+    "name": "EmailMfaV2API",
+    "description": "API for managing Email MFA V2 enrollments and one-time codes",
+    "category": [
+        {
+            "name": "EmailMfaV2",
+            "description": "Email-delivered MFA with multi-code reuse window"
+        }
+    ],
+    "route": {
+        "GET \/email_mfa_v2\/status\/{user_type}\/{user_id}": {
+            "name": "MFA Status",
+            "description": "Read-only summary: enrollment flag + active codes count (total + per-purpose)",
+            "param": [
+                {
+                    "type": "string",
+                    "name": "user_type",
+                    "description": "Admin or Client",
+                    "inurl": true,
+                    "required": true
+                },
+                {
+                    "type": "int",
+                    "name": "user_id",
+                    "description": "HostBill user id",
+                    "inurl": true,
+                    "required": true
+                }
+            ],
+            "route": "GET \/email_mfa_v2\/status\/{user_type}\/{user_id}",
+            "auth": true,
+            "handle": "getStatus",
+            "uuid": "c2b969e0-265c-fb92-77d9-183f7a3f2071",
+            "priority": 10,
+            "category": "EmailMfaV2",
+            "http": "GET",
+            "address": "\/email_mfa_v2\/status\/{user_type}\/{user_id}"
+        },
+        "POST \/email_mfa_v2\/send": {
+            "name": "Send Code",
+            "description": "Issue and email a new one-time code to the target user",
+            "param": [
+                {
+                    "type": "string",
+                    "name": "user_type",
+                    "description": "Admin or Client",
+                    "inurl": false,
+                    "required": true
+                },
+                {
+                    "type": "int",
+                    "name": "user_id",
+                    "description": "HostBill user id",
+                    "inurl": false,
+                    "required": true
+                },
+                {
+                    "type": "string",
+                    "name": "purpose",
+                    "description": "login | setup | action (default login)",
+                    "inurl": false,
+                    "required": false
+                }
+            ],
+            "route": "POST \/email_mfa_v2\/send",
+            "auth": true,
+            "handle": "sendCode",
+            "uuid": "c2b969e0-265c-fb92-77d9-489f7a3f2071",
+            "priority": 10,
+            "category": "EmailMfaV2",
+            "http": "POST",
+            "address": "\/email_mfa_v2\/send"
+        },
+        "POST \/email_mfa_v2\/verify": {
+            "name": "Verify Code",
+            "description": "Verify a one-time code submitted by the user. Returns 200 on success, 401 on invalid/expired.",
+            "param": [
+                {
+                    "type": "string",
+                    "name": "user_type",
+                    "description": "Admin or Client",
+                    "inurl": false,
+                    "required": true
+                },
+                {
+                    "type": "int",
+                    "name": "user_id",
+                    "description": "HostBill user id",
+                    "inurl": false,
+                    "required": true
+                },
+                {
+                    "type": "string",
+                    "name": "code",
+                    "description": "The one-time code (digits only)",
+                    "inurl": false,
+                    "required": true
+                },
+                {
+                    "type": "string",
+                    "name": "purpose",
+                    "description": "login | setup | action",
+                    "inurl": false,
+                    "required": false
+                }
+            ],
+            "route": "POST \/email_mfa_v2\/verify",
+            "auth": true,
+            "handle": "verifyCode",
+            "uuid": "c2b969e0-265c-fb92-ed94-89f7a3f2071",
+            "priority": 10,
+            "category": "EmailMfaV2",
+            "http": "POST",
+            "address": "\/email_mfa_v2\/verify"
+        },
+        "GET \/email_mfa_v2\/list\/{user_type}\/{user_id}": {
+            "name": "List Active Codes",
+            "description": "List active codes for the target user. Returns only an 8-char hash_prefix — never the full SHA-256 hash, never plaintext.",
+            "param": [
+                {
+                    "type": "string",
+                    "name": "user_type",
+                    "description": "Admin or Client",
+                    "inurl": true,
+                    "required": true
+                },
+                {
+                    "type": "int",
+                    "name": "user_id",
+                    "description": "HostBill user id",
+                    "inurl": true,
+                    "required": true
+                }
+            ],
+            "route": "GET \/email_mfa_v2\/list\/{user_type}\/{user_id}",
+            "auth": true,
+            "handle": "listActive",
+            "uuid": "c2b969e0-265c-fb92-ed94-89f7a3f2072",
+            "priority": 10,
+            "category": "EmailMfaV2",
+            "http": "GET",
+            "address": "\/email_mfa_v2\/list\/{user_type}\/{user_id}"
+        },
+        "POST \/email_mfa_v2\/revokeall": {
+            "name": "Revoke All Codes",
+            "description": "Revoke all active codes for the target user. Enrollment is kept; the user can still log in via MFA but with no pre-existing valid codes.",
+            "param": [
+                {
+                    "type": "string",
+                    "name": "user_type",
+                    "description": "Admin or Client",
+                    "inurl": false,
+                    "required": true
+                },
+                {
+                    "type": "int",
+                    "name": "user_id",
+                    "description": "HostBill user id",
+                    "inurl": false,
+                    "required": true
+                }
+            ],
+            "route": "POST \/email_mfa_v2\/revokeall",
+            "auth": true,
+            "handle": "revokeAll",
+            "uuid": "c2b969e0-265c-fb92-ed94-89f7a3f2073",
+            "priority": 10,
+            "category": "EmailMfaV2",
+            "http": "POST",
+            "address": "\/email_mfa_v2\/revokeall"
+        },
+        "POST \/email_mfa_v2\/disable": {
+            "name": "Disable MFA",
+            "description": "Disable MFA entirely for the target user (drops enrollment row + purges all active codes + invalidates cache).",
+            "param": [
+                {
+                    "type": "string",
+                    "name": "user_type",
+                    "description": "Admin or Client",
+                    "inurl": false,
+                    "required": true
+                },
+                {
+                    "type": "int",
+                    "name": "user_id",
+                    "description": "HostBill user id",
+                    "inurl": false,
+                    "required": true
+                }
+            ],
+            "route": "POST \/email_mfa_v2\/disable",
+            "auth": true,
+            "handle": "disableForUser",
+            "uuid": "c2b969e0-265c-fb92-ed94-89f7a3f2074",
+            "priority": 10,
+            "category": "EmailMfaV2",
+            "http": "POST",
+            "address": "\/email_mfa_v2\/disable"
+        }
+    }
+}
